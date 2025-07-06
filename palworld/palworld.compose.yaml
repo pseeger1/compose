@@ -21,10 +21,10 @@ services:
     env_file: ./palworld.env
     environment:
       # Server settings
-      SERVER_NAME: "My Palworld Server"
-      SERVER_DESCRIPTION: "Custom Palworld server with reduced egg hatch time and disabled raids"
+      SERVER_DESCRIPTION: "Custom Palworld server with reduced egg hatch time, disabled raids, and drop on death disabled"
       ADMIN_PASSWORD: "admin123"
-      SERVER_PASSWORD: ""
+      SERVER_PASSWORD: "zoom zoom zoom"
+      SERVER_NAME: "Jackson Storm's Palworld Server"
       MAX_PLAYERS: 32
       
       # Game settings
@@ -70,12 +70,10 @@ services:
       IS_START_LOCATION_SELECT_BY_MAP: "True"
       EXIST_PLAYER_AFTER_LOGOUT: "False"
       ENABLE_DEFENSE_OTHER_GUILD_PLAYER: "False"
-      COOP_PLAYER_MAX_NUM: 4
+      COOP_PLAYER_MAX_NUM: 8
       SERVER_PLAYER_AUTHENTICATION_TIMEOUT: 300.0
       USE_OS_VOICE_CHAT: "False"
       ENABLE_PLAYER_VOICE_CHAT: "False"
-      SERVER_PASSWORD: "zoom zoom zoom"
-      SERVER_NAME: "Jackson Storm's Palworld Server"
       
     logging:
       driver: "json-file"

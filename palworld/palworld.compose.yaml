@@ -10,12 +10,15 @@ services:
     image: thijsvanloef/palworld-server:latest
     container_name: palworld-server
     restart: unless-stopped
+    labels:
+      komodo.managed: "true"  # Allow Komodo to manage this container
     ports:
       - "8211:8211/udp"  # Game port
       - "27015:27015/udp"  # Steam query port
     volumes:
       - palworld-data:/palworld/Pal/Saved
       - palworld-config:/palworld/Pal/Config
+    env_file: ./palworld.env
     environment:
       # Server settings
       SERVER_NAME: "My Palworld Server"

@@ -7,7 +7,7 @@
 
 services:
   palworld:
-    image: thijsvanloef/palworld-server:latest
+    image: thijsvanloef/palworld-server-docker:latest
     container_name: palworld-server
     restart: unless-stopped
     labels:

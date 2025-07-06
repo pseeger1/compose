@@ -1,0 +1,85 @@
+################################
+# 🦎 COMPOSE - PALWORLD 🦎 #
+################################
+
+## This compose file will deploy:
+##   Palworld Dedicated Server with custom settings
+
+services:
+  palworld:
+    image: thijsvanloef/palworld-server:latest
+    container_name: palworld-server
+    restart: unless-stopped
+    ports:
+      - "8211:8211/udp"  # Game port
+      - "27015:27015/udp"  # Steam query port
+    volumes:
+      - palworld-data:/palworld/Pal/Saved
+      - palworld-config:/palworld/Pal/Config
+    environment:
+      # Server settings
+      SERVER_NAME: "My Palworld Server"
+      SERVER_DESCRIPTION: "Custom Palworld server with reduced egg hatch time and disabled raids"
+      ADMIN_PASSWORD: "admin123"
+      SERVER_PASSWORD: ""
+      MAX_PLAYERS: 32
+      
+      # Game settings
+      DIFFICULTY: "Normal"
+      DAY_TIME_SPEED_RATE: 1.0
+      NIGHT_TIME_SPEED_RATE: 1.0
+      EXP_RATE: 1.0
+      PAL_CAPTURE_RATE: 1.0
+      PAL_SPAWN_NUM_RATE: 1.0
+      PAL_DAMAGE_RATE_ATTACK: 1.0
+      PAL_DAMAGE_RATE_DEFENSE: 1.0
+      PLAYER_DAMAGE_RATE_ATTACK: 1.0
+      PLAYER_DAMAGE_RATE_DEFENSE: 1.0
+      PLAYER_STOMACH_DECREASE_RATE: 1.0
+      PLAYER_STAMINA_DECREASE_RATE: 1.0
+      PLAYER_AUTO_HP_REGEN_RATE: 1.0
+      PLAYER_AUTO_HP_REGEN_RATE_IN_SLEEP: 1.0
+      PAL_STOMACH_DECREASE_RATE: 1.0
+      PAL_STAMINA_DECREASE_RATE: 1.0
+      PAL_AUTO_HP_REGEN_RATE: 1.0
+      PAL_AUTO_HP_REGEN_RATE_IN_SLEEP: 1.0
+      
+      # Custom settings for your requirements
+      EGG_HATCH_TIME: 0.1  # Reduced egg hatch time (0.1 = 10% of normal time)
+      ENABLE_RAID: "False"  # Disable raids
+      ENABLE_WEAPON_DROP_ON_DEATH: "False"  # Disable weapon drops on death
+      
+      # Additional settings
+      ENABLE_PLAYER_TO_PLAYER_DAMAGE: "False"
+      ENABLE_FRIENDLY_FIRE: "False"
+      ENABLE_INVADER_ENEMY: "False"
+      ACTIVE_UNUSES: "True"
+      ENABLE_AIM_ASSIST_PAD: "True"
+      ENABLE_AIM_ASSIST_KEYBOARD: "False"
+      DROP_ITEM_MAX_NUM: 3000
+      DROP_ITEM_MAX_NUM_UNUSED: 1
+      BASE_CAMP_MAX_NUM: 128
+      BASE_CAMP_WORKER_MAX_NUM: 15
+      DROP_ITEM_ALIVE_MAX_HOURS: 1.0
+      AUTO_RESET_GRIND_TIME_IN_CAN_PAL: 72.0
+      ENABLE_NON_LOGIN_PENALTY: "True"
+      ENABLE_FAST_TRAVEL: "True"
+      IS_START_LOCATION_SELECT_BY_MAP: "True"
+      EXIST_PLAYER_AFTER_LOGOUT: "False"
+      ENABLE_DEFENSE_OTHER_GUILD_PLAYER: "False"
+      COOP_PLAYER_MAX_NUM: 4
+      SERVER_PLAYER_AUTHENTICATION_TIMEOUT: 300.0
+      USE_OS_VOICE_CHAT: "False"
+      ENABLE_PLAYER_VOICE_CHAT: "False"
+      
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  palworld-data:
+    driver: local
+  palworld-config:
+    driver: local 

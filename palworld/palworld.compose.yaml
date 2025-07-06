@@ -74,6 +74,8 @@ services:
       SERVER_PLAYER_AUTHENTICATION_TIMEOUT: 300.0
       USE_OS_VOICE_CHAT: "False"
       ENABLE_PLAYER_VOICE_CHAT: "False"
+      SERVER_PASSWORD: "zoom zoom zoom"
+      SERVER_NAME: "Jackson Storm's Palworld Server"
       
     logging:
       driver: "json-file"

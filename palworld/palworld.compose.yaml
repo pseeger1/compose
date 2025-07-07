@@ -58,6 +58,8 @@ services:
 
       # Discord settings
       DISCORD_WEBHOOK_URL: "https://discord.com/api/webhooks/1391770769943433361/Pqw5A3uGWBTpsSbCmtwGNGgLY1xHDaWqcDjNHa1JYbXXoi-_gOFHC-ftug3Uiy75oSHX"
+      DISCORD_PLAYER_JOIN_MESSAGE: "player_name has joined Palworld!"
+      DISCORD_PLAYER_JOIN_MESSAGE_ENABLED: true
       
       # Additional settings
       ENABLE_PLAYER_TO_PLAYER_DAMAGE: "False"

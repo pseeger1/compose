@@ -56,6 +56,8 @@ services:
       EGG_HATCH_TIME: 0.25  # Reduced egg hatch time (0.1 = 10% of normal time)
       ENABLE_RAID: "False"  # Disable raids
 
+      # Discord settings
+      DISCORD_WEBHOOK_URL: "https://discord.com/api/webhooks/1391770769943433361/Pqw5A3uGWBTpsSbCmtwGNGgLY1xHDaWqcDjNHa1JYbXXoi-_gOFHC-ftug3Uiy75oSHX"
       
       # Additional settings
       ENABLE_PLAYER_TO_PLAYER_DAMAGE: "False"

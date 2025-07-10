@@ -1,0 +1,139 @@
+################################
+# 🦎 COMPOSE - REVOLT 🦎 #
+################################
+
+## This compose file will deploy:
+##   Revolt Self-Hosted Instance with all services
+
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:6
+    container_name: revolt-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-password}
+    volumes:
+      - revolt-mongodb:/data/db
+    networks:
+      - revolt-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: revolt-redis
+    restart: unless-stopped
+    volumes:
+      - revolt-redis:/data
+    networks:
+      - revolt-network
+
+  # Revolt API Server
+  api:
+    image: revoltchat/api:latest
+    container_name: revolt-api
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+      - redis
+    environment:
+      # Database Configuration
+      REVOLT_DATABASE_URL: mongodb://${MONGO_USERNAME:-admin}:${MONGO_PASSWORD:-password}@mongodb:27017/revolt?authSource=admin
+      
+      # Redis Configuration
+      REVOLT_REDIS_URL: redis://redis:6379
+      
+      # Server Configuration
+      REVOLT_APP_URL: ${REVOLT_APP_URL:-http://localhost:3000}
+      REVOLT_API_URL: ${REVOLT_API_URL:-http://localhost:3000}
+      REVOLT_WEBSOCKET_URL: ${REVOLT_WEBSOCKET_URL:-ws://localhost:3000}
+      
+      # Security
+      REVOLT_JWT_SECRET: ${REVOLT_JWT_SECRET:-your-super-secret-jwt-key}
+      REVOLT_SMTP_HOST: ${REVOLT_SMTP_HOST:-}
+      REVOLT_SMTP_USERNAME: ${REVOLT_SMTP_USERNAME:-}
+      REVOLT_SMTP_PASSWORD: ${REVOLT_SMTP_PASSWORD:-}
+      REVOLT_SMTP_FROM: ${REVOLT_SMTP_FROM:-noreply@yourdomain.com}
+      
+      # Optional: Email verification
+      REVOLT_EMAIL_VERIFICATION: ${REVOLT_EMAIL_VERIFICATION:-false}
+      
+      # Optional: Registration settings
+      REVOLT_REGISTRATION_DISABLED: ${REVOLT_REGISTRATION_DISABLED:-false}
+      REVOLT_INVITE_ONLY: ${REVOLT_INVITE_ONLY:-false}
+      
+      # Optional: File upload settings
+      REVOLT_MAX_FILE_SIZE: ${REVOLT_MAX_FILE_SIZE:-16777216}
+      
+      # Optional: Rate limiting
+      REVOLT_RATE_LIMIT_ENABLED: ${REVOLT_RATE_LIMIT_ENABLED:-true}
+      
+    volumes:
+      - revolt-uploads:/app/uploads
+    networks:
+      - revolt-network
+    ports:
+      - "3000:3000"
+
+  # Revolt Web Client
+  web:
+    image: revoltchat/web:latest
+    container_name: revolt-web
+    restart: unless-stopped
+    depends_on:
+      - api
+    environment:
+      REVOLT_APP_URL: ${REVOLT_APP_URL:-http://localhost:3000}
+      REVOLT_API_URL: ${REVOLT_API_URL:-http://localhost:3000}
+      REVOLT_WEBSOCKET_URL: ${REVOLT_WEBSOCKET_URL:-ws://localhost:3000}
+      REVOLT_INVITE_ONLY: ${REVOLT_INVITE_ONLY:-false}
+      REVOLT_REGISTRATION_DISABLED: ${REVOLT_REGISTRATION_DISABLED:-false}
+      REVOLT_EMAIL_VERIFICATION: ${REVOLT_EMAIL_VERIFICATION:-false}
+      REVOLT_MAX_FILE_SIZE: ${REVOLT_MAX_FILE_SIZE:-16777216}
+      REVOLT_RATE_LIMIT_ENABLED: ${REVOLT_RATE_LIMIT_ENABLED:-true}
+    networks:
+      - revolt-network
+    ports:
+      - "3001:3000"
+
+  # Optional: Revolt Desktop Client (if needed)
+  # desktop:
+  #   image: revoltchat/desktop:latest
+  #   container_name: revolt-desktop
+  #   restart: unless-stopped
+  #   environment:
+  #     REVOLT_APP_URL: ${REVOLT_APP_URL:-http://localhost:3000}
+  #   networks:
+  #     - revolt-network
+
+  # Optional: Nginx Reverse Proxy (recommended for production)
+  nginx:
+    image: nginx:alpine
+    container_name: revolt-nginx
+    restart: unless-stopped
+    depends_on:
+      - api
+      - web
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - revolt-uploads:/var/www/uploads:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - revolt-network
+
+networks:
+  revolt-network:
+    driver: bridge
+
+volumes:
+  revolt-mongodb:
+    driver: local
+  revolt-redis:
+    driver: local
+  revolt-uploads:
+    driver: local 

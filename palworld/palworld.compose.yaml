@@ -53,7 +53,7 @@ services:
       DELETE_OLD_BACKUP: false
       
       # Custom settings for your requirements
-      EGG_HATCH_TIME: 0.25  # Reduced egg hatch time (0.1 = 10% of normal time)
+      PAL_EGG_DEFAULT_HATCHING_TIME	: 4  # Reduced egg hatch time (0.1 = 10% of normal time)
       ENABLE_RAID: "False"  # Disable raids
 
       # Discord settings
